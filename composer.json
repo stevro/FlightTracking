@@ -19,7 +19,7 @@
     "php": "7.*",
     "guzzlehttp/guzzle": ">=6.0",
     "ext-json": "*",
-    "jms/serializer": "v1.14.1",
+    "jms/serializer": "^v1.14",
     "symfony/options-resolver": "^3.4|^4.4|^5.4"
   },
   "require-dev": {
