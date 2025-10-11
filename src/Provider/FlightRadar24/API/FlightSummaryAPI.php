@@ -30,8 +30,8 @@ class FlightSummaryAPI extends BaseAPI
                 'query' => [
                     'flights' => $flights ? implode(',', $flights) : null,
                     'flight_ids' => $ids ? implode(',', $ids) : null,
-                    'flight_datetime_from' => $flightDateTimeFrom ? $flightDateTimeFrom->format('Y-m-dTH:i:s') : null,
-                    'flight_datetime_to' => $flightDateTimeTo ? $flightDateTimeTo->format('Y-m-dTH:i:s') : null,
+                    'flight_datetime_from' => $flightDateTimeFrom ? $flightDateTimeFrom->format('Y-m-d\TH:i:s') : null,
+                    'flight_datetime_to' => $flightDateTimeTo ? $flightDateTimeTo->format('Y-m-d\TH:i:s') : null,
                 ],
             ]);
         } catch (BadResponseException $e) {
@@ -63,8 +63,8 @@ class FlightSummaryAPI extends BaseAPI
                 'query' => [
                     'flights' => $flights ? implode(',', $flights) : null,
                     'flight_ids' => $ids ? implode(',', $ids) : null,
-                    'flight_date_time_from' => $flightDateTimeFrom ? $flightDateTimeFrom->format('Y-m-dTH:i:s') : null,
-                    'flight_date_time_to' => $flightDateTimeTo ? $flightDateTimeTo->format('Y-m-dTH:i:s') : null,
+                    'flight_datetime_from' => $flightDateTimeFrom ? $flightDateTimeFrom->format('Y-m-d\TH:i:s') : null,
+                    'flight_datetime_to' => $flightDateTimeTo ? $flightDateTimeTo->format('Y-m-d\TH:i:s') : null,
                 ],
             ]);
         } catch (BadResponseException $e) {
