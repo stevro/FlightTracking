@@ -1,6 +1,6 @@
 <?php
 
-namespace Stevro\FlightTracking\FlightRadar24\Model;
+namespace Stevro\FlightTracking\Provider\FlightRadar24\Model;
 
 use JMS\Serializer\Annotation as JMS;
 
@@ -56,6 +56,12 @@ class FlightSummary
      * @JMS\SerializedName("orig_icao")
      */
     public $origIcao;
+    /**
+     * @var string
+     * @JMS\Type("string")
+     * @JMS\SerializedName("orig_iata")
+     */
+    public $origIata;
 
     /**
      * @var string
@@ -66,9 +72,21 @@ class FlightSummary
     /**
      * @var string
      * @JMS\Type("string")
+     * @JMS\SerializedName("dest_iata")
+     */
+    public $destIata;
+    /**
+     * @var string
+     * @JMS\Type("string")
      * @JMS\SerializedName("dest_icao_actual")
      */
     public $destIcaoActual;
+    /**
+     * @var string
+     * @JMS\Type("string")
+     * @JMS\SerializedName("dest_iata_actual")
+     */
+    public $destIataActual;
 
     /**
      * @var \DateTimeImmutable
@@ -108,22 +126,4 @@ class FlightSummary
      */
     public $flightEnded;
 
-//{
-//"fr24_id": "391fdd79",
-//"flight": "D84529",
-//"callsign": "NSZ4529",
-//"operating_as": "NSZ",
-//"painted_as": "NSZ",
-//"type": "B38M",
-//"reg": "SE-RTC",
-//"orig_icao": "ESSA",
-//"datetime_takeoff": null,
-//"dest_icao": "GMAD",
-//"dest_icao_actual": "GMAD",
-//"datetime_landed": null,
-//"hex": "4ACA83",
-//"first_seen": "2025-02-14T11:47:06Z",
-//"last_seen": "2025-02-14T13:11:49Z",
-//"flight_ended": true
-//}
 }

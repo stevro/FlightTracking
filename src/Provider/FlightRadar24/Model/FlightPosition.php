@@ -1,6 +1,6 @@
 <?php
 
-namespace Stevro\FlightTracking\FlightRadar24\Model;
+namespace Stevro\FlightTracking\Provider\FlightRadar24\Model;
 
 use JMS\Serializer\Annotation as JMS;
 
@@ -125,29 +125,4 @@ class FlightPosition
      * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
      */
     public $eta;
-
-    /*
-     * "fr24_id": "321a0cc3",
-    "flight": "AF1463",
-    "callsign": "AFR1463",
-    "lat": -0.08806,
-    "lon": -168.07118,
-    "track": 219,
-    "alt": 38000,
-    "gspeed": 500,
-    "vspeed": 340,
-    "squawk": 6135,
-    "timestamp": "2023-11-08T10:10:00Z",
-    "source": "ADSB",
-    "hex": "394C19",
-    "type": "A321",
-    "reg": "F-GTAZ",
-    "painted_as": "THY",
-    "operating_as": "THY",
-    "orig_iata": "ARN",
-    "orig_icao": "ESSA",
-    "dest_iata": "LHR",
-    "dest_icao": "EGLL",
-    "eta": "2023-11-08T16:12:24Z"
-     */
 }

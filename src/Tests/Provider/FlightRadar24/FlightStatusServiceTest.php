@@ -1,13 +1,14 @@
 <?php
 
-namespace Stevro\FlightTracking\Tests\FlightRadar24;
+namespace Stevro\FlightTracking\Tests\Provider\FlightRadar24;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Stevro\FlightTracking\FlightRadar24\Service\FlightStatusService;
+use Stevro\FlightTracking\Model\FlightStatus;
+use Stevro\FlightTracking\Provider\FlightRadar24\Service\FlightStatusService;
 
 class FlightStatusServiceTest extends TestCase
 {
@@ -26,7 +27,6 @@ class FlightStatusServiceTest extends TestCase
         // Prepare test data
         $flightNumber = 'BA123';
         $flightDateTimeFrom = new \DateTime('2023-10-01 10:00:00');
-        $flightDateTimeTo = new \DateTime('2023-10-01 20:00:00');
 
         // Mock API response for flight summary (landed flight)
         $summaryResponseData = [
@@ -34,9 +34,9 @@ class FlightStatusServiceTest extends TestCase
                 [
                     'flight' => 'BA123',
                     'fr24_id' => 'fr24-12345',
-                    'orig_icao' => 'EGLL',
-                    'dest_icao' => 'KJFK',
-                    'dest_icao_actual' => 'KJFK',
+                    'orig_iata' => 'LHR',
+                    'dest_iata' => 'JFK',
+                    'dest_iata_actual' => 'JFK',
                     'flight_ended' => true,
                     'datetime_landed' => '2023-10-01T18:30:00',
                 ],
@@ -48,14 +48,14 @@ class FlightStatusServiceTest extends TestCase
         );
 
         // Execute
-        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom, $flightDateTimeTo);
+        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom);
 
         // Assert
         $this->assertEquals('BA123', $status->flightNumber);
-        $this->assertEquals('EGLL', $status->originIcao);
-        $this->assertEquals('KJFK', $status->destinationIcao);
+        $this->assertEquals('LHR', $status->originIata);
+        $this->assertEquals('JFK', $status->destinationIata);
         $this->assertEquals('fr24-12345', $status->flightId);
-        $this->assertTrue($status->isLanded);
+        $this->assertEquals(FlightStatus::STATUS_LANDED, $status->status);
         $this->assertNotNull($status->landedAt);
         $this->assertNull($status->eta);
     }
@@ -65,7 +65,7 @@ class FlightStatusServiceTest extends TestCase
         // Prepare test data
         $flightNumber = 'BA456';
         $flightDateTimeFrom = new \DateTime('2023-10-01 10:00:00');
-        $flightDateTimeTo = new \DateTime('2023-10-01 20:00:00');
+
 
         // Mock API response for flight summary (in-flight)
         $summaryResponseData = [
@@ -73,9 +73,10 @@ class FlightStatusServiceTest extends TestCase
                 [
                     'flight' => 'BA456',
                     'fr24_id' => 'fr24-67890',
-                    'orig_icao' => 'EGLL',
-                    'dest_icao' => 'LFPG',
-                    'dest_icao_actual' => null,
+                    'orig_iata' => 'LHR',
+                    'dest_iata' => 'CDG',
+                    'dest_iata_actual' => null,
+                    'datetime_takeoff' => '2023-10-01T10:02:00',
                     'flight_ended' => false,
                 ],
             ],
@@ -96,14 +97,14 @@ class FlightStatusServiceTest extends TestCase
         );
 
         // Execute
-        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom, $flightDateTimeTo);
+        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom);
 
         // Assert
         $this->assertEquals('BA456', $status->flightNumber);
-        $this->assertEquals('EGLL', $status->originIcao);
-        $this->assertEquals('LFPG', $status->destinationIcao);
+        $this->assertEquals('LHR', $status->originIata);
+        $this->assertEquals('CDG', $status->destinationIata);
         $this->assertEquals('fr24-67890', $status->flightId);
-        $this->assertFalse($status->isLanded);
+        $this->assertEquals(FlightStatus::STATUS_DEPARTED, $status->status);
         $this->assertNull($status->landedAt);
         $this->assertNotNull($status->eta);
     }
@@ -113,7 +114,6 @@ class FlightStatusServiceTest extends TestCase
         // Prepare test data
         $flightNumber = 'BA789';
         $flightDateTimeFrom = new \DateTime('2023-10-01 10:00:00');
-        $flightDateTimeTo = new \DateTime('2023-10-01 20:00:00');
 
         // Mock API response with different actual destination
         $summaryResponseData = [
@@ -121,9 +121,9 @@ class FlightStatusServiceTest extends TestCase
                 [
                     'flight' => 'BA789',
                     'fr24_id' => 'fr24-11111',
-                    'orig_icao' => 'EGLL',
-                    'dest_icao' => 'LFPG',
-                    'dest_icao_actual' => 'LFPO',
+                    'orig_iata' => 'LHR',
+                    'dest_iata' => 'CDG',
+                    'dest_iata_actual' => 'ORY',
                     'flight_ended' => true,
                     'datetime_landed' => '2023-10-01T15:00:00',
                 ],
@@ -135,10 +135,10 @@ class FlightStatusServiceTest extends TestCase
         );
 
         // Execute
-        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom, $flightDateTimeTo);
+        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom);
 
         // Assert - should use actual destination
-        $this->assertEquals('LFPO', $status->destinationIcao);
+        $this->assertEquals('ORY', $status->destinationIata);
     }
 
     public function testGetStatusUsesFallbackDestinationWhenActualIsNull()
@@ -146,7 +146,7 @@ class FlightStatusServiceTest extends TestCase
         // Prepare test data
         $flightNumber = 'BA999';
         $flightDateTimeFrom = new \DateTime('2023-10-01 10:00:00');
-        $flightDateTimeTo = new \DateTime('2023-10-01 20:00:00');
+
 
         // Mock API response without actual destination
         $summaryResponseData = [
@@ -154,9 +154,9 @@ class FlightStatusServiceTest extends TestCase
                 [
                     'flight' => 'BA999',
                     'fr24_id' => 'fr24-22222',
-                    'orig_icao' => 'EGLL',
-                    'dest_icao' => 'EDDF',
-                    'dest_icao_actual' => null,
+                    'orig_iata' => 'LHR',
+                    'dest_iata' => 'FRA',
+                    'dest_iata_actual' => null,
                     'flight_ended' => true,
                     'datetime_landed' => '2023-10-01T16:00:00',
                 ],
@@ -168,10 +168,10 @@ class FlightStatusServiceTest extends TestCase
         );
 
         // Execute
-        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom, $flightDateTimeTo);
+        $status = $this->service->getStatus($flightNumber, $flightDateTimeFrom);
 
         // Assert - should use fallback destination
-        $this->assertEquals('EDDF', $status->destinationIcao);
+        $this->assertEquals('FRA', $status->destinationIata);
     }
 
     protected function setUp()
