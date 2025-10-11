@@ -51,7 +51,7 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
             return $status;
         }
 
-        $positionData = $this->flightPositionAPI->light(null, [$myFlight->fr24Id]);
+        $positionData = $this->flightPositionAPI->full(null, [$myFlight->fr24Id]);
 
         /** @var FlightPosition $myPosition */
         $myPosition = reset($positionData);
