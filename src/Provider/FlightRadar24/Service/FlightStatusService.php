@@ -30,7 +30,7 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
         /** @var FlightSummary $myFlight */
         $myFlight = reset($summaryData);
 
-        $status = new FlightStatus();
+        $status = new FlightStatus('FlightRadar24');
         if (!$myFlight) {
             $status->flightNumber = $flightNumber;
             $status->status = FlightStatus::STATUS_UNKNOWN;

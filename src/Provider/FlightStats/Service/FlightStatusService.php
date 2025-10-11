@@ -31,7 +31,7 @@ class FlightStatusService implements FlightStatusServiceInterface
 
         $response = $this->api->getByArrivalDate($flightNumber, $this->options['carrier'], $flightDate, $this->options['queryParams']);
 
-        $flightStatus = new FlightStatus();
+        $flightStatus = new FlightStatus('FlightStats');
 
         if (!$response->flightStatuses) {
             $flightStatus->flightNumber = $flightNumber;
