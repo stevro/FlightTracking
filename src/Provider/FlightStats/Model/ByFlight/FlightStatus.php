@@ -51,6 +51,12 @@ class FlightStatus
     public $arrivalDate;
 
     /**
+     * @var Delays|null
+     * @JMS\Type("Stevro\FlightTracking\Provider\FlightStats\Model\ByFlight\Delays")
+     */
+    public $delays;
+
+    /**
      * @var string
      * @JMS\Type("string")
      *
