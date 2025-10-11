@@ -3,6 +3,7 @@
 namespace Stevro\FlightTracking\Provider\FlightStats\Service;
 
 use Stevro\FlightTracking\Interfaces\FlightStatusServiceInterface;
+use Stevro\FlightTracking\Model\Delays;
 use Stevro\FlightTracking\Model\FlightStatus;
 use Stevro\FlightTracking\Provider\FlightStats\API\FlightStatusByFlightAPI;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,12 +40,17 @@ class FlightStatusService implements FlightStatusServiceInterface
             return $flightStatus;
         }
 
+        /** @var \Stevro\FlightTracking\Provider\FlightStats\Model\ByFlight\FlightStatus $responseStatus */
         $responseStatus = reset($response->flightStatuses);
 
         $flightStatus->flightId = $responseStatus->flightId;
         $flightStatus->flightNumber = $responseStatus->flightNumber;
         $flightStatus->eta = $responseStatus->operationalTimes->estimatedGateArrival->dateLocal;
-
+        if ($responseStatus->delays) {
+            $flightStatus->delays = new Delays();
+            $flightStatus->delays->departureDelayMinutes = $responseStatus->delays->departureGateDelayMinutes;
+            $flightStatus->delays->arrivalDelayMinutes = $responseStatus->delays->arrivalGateDelayMinutes;
+        }
         $flightStatus->destinationIata = $responseStatus->divertedAirport->iata ?? $responseStatus->arrivalAirportFsCode;
         $flightStatus->originIata = $responseStatus->departureAirportFsCode;
 

@@ -35,4 +35,9 @@ class FlightStatus
     /** @var string */
     public $destinationIata;
 
+    /**
+     * @var Delays
+     */
+    public $delays;
+
 }
