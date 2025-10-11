@@ -61,7 +61,7 @@ class FlightPosition
     public $squawk;
     /**
      * @var \DateTimeImmutable
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
      */
     public $timestamp;
     /**
