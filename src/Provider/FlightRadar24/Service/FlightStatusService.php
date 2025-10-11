@@ -31,6 +31,13 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
         $myFlight = reset($summaryData);
 
         $status = new FlightStatus();
+        if (!$myFlight) {
+            $status->flightNumber = $flightNumber;
+            $status->status = FlightStatus::STATUS_UNKNOWN;
+
+            return $status;
+        }
+
         $status->flightNumber = $myFlight->flight;
         $status->destinationIata = $myFlight->destIataActual ?: $myFlight->destIata;
         $status->originIata = $myFlight->origIata;
