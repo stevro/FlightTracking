@@ -7,6 +7,7 @@ use Stevro\FlightTracking\Provider\FlightRadar24\API\FlightPositionsAPI;
 use Stevro\FlightTracking\Provider\FlightRadar24\API\FlightSummaryAPI;
 use Stevro\FlightTracking\Provider\FlightRadar24\Model\FlightPosition;
 use Stevro\FlightTracking\Provider\FlightRadar24\Model\FlightSummary;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightStatusServiceInterface
 {
@@ -14,6 +15,8 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
     private $flightSummaryAPI;
 
     private $flightPositionAPI;
+
+    private $options = [];
 
     public function __construct($apiKey)
     {
@@ -23,8 +26,15 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
 
     public function getStatus($flightNumber, \DateTime $flightDate, array $options = []): FlightStatus
     {
+        $this->resolveOptions($options);
+
         $flightDateTimeFrom = (clone $flightDate)->setTime(0, 0, 0);
         $flightDateTimeTo = (clone $flightDate)->setTime(23, 59, 59);
+
+        if(isset($this->options['carrier']) && !empty($this->options['carrier'])) {
+            $flightNumber = $this->options['carrier'] . $flightNumber;
+        }
+
         $summaryData = $this->flightSummaryAPI->light([$flightNumber], null, $flightDateTimeFrom, $flightDateTimeTo);
 
         /** @var FlightSummary $myFlight */
@@ -60,6 +70,20 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
         $status->eta = $myPosition->eta;
 
         return $status;
+    }
+
+    protected function resolveOptions(array $options)
+    {
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        $this->options = $resolver->resolve($options);
+    }
+
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefined(['carrier']);
+
+        $resolver->setAllowedTypes('carrier', 'string');
     }
 
 }
