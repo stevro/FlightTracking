@@ -90,19 +90,19 @@ class FlightSummary
 
     /**
      * @var \DateTimeImmutable
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
      * @JMS\SerializedName("datetime_takeoff")
      */
     public $dateTimeTakeoff;
     /**
      * @var \DateTimeImmutable|null
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
      * @JMS\SerializedName("datetime_landed")
      */
     public $dateTimeLanded;
     /**
      * @var \DateTimeImmutable|null
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
      * @JMS\SerializedName("first_seen")
      */
     public $firstSeen;

@@ -122,7 +122,7 @@ class FlightPosition
     public $destIcao;
     /**
      * @var \DateTimeImmutable
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
      */
     public $eta;
 }
