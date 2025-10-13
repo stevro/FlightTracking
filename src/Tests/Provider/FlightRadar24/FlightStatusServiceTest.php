@@ -86,7 +86,7 @@ class FlightStatusServiceTest extends TestCase
         $positionResponseData = [
             'data' => [
                 [
-                    'eta' => '2023-10-01T14:30:00',
+                    'eta' => '2023-10-01T14:30:00Z',
                 ],
             ],
         ];
