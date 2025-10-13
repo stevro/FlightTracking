@@ -108,7 +108,7 @@ class FlightSummary
     public $firstSeen;
     /**
      * @var \DateTimeImmutable|null
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
      * @JMS\SerializedName("last_seen")
      */
     public $lastSeen;
