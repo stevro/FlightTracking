@@ -49,9 +49,10 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
         }
 
         $status->flightNumber = $myFlight->flight;
+        $status->flightId = $myFlight->fr24Id;
         $status->destinationIata = $myFlight->destIataActual ?: $myFlight->destIata;
         $status->originIata = $myFlight->origIata;
-        $status->flightId = $myFlight->fr24Id;
+
         $status->departedAt = $myFlight->dateTimeTakeoff;
 
         if (true === $myFlight->flightEnded) {
@@ -61,13 +62,20 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
             return $status;
         }
 
-        $positionData = $this->flightPositionAPI->full(null, [$myFlight->fr24Id]);
+        $positionData = $this->flightPositionAPI->full([$myFlight->flight]);
 
         /** @var FlightPosition $myPosition */
         $myPosition = reset($positionData);
 
         $status->status = $myFlight->dateTimeTakeoff ? FlightStatus::STATUS_DEPARTED : FLightStatus::STATUS_SCHEDULED;
         $status->eta = $myPosition->eta;
+
+        if(!$status->destinationIata){
+            $status->destinationIata = $myPosition->destIata;
+        }
+        if(!$status->originIata){
+            $status->originIata = $myPosition->origIata;
+        }
 
         return $status;
     }
