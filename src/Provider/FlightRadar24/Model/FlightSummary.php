@@ -90,25 +90,25 @@ class FlightSummary
 
     /**
      * @var \DateTimeImmutable
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
      * @JMS\SerializedName("datetime_takeoff")
      */
     public $dateTimeTakeoff;
     /**
      * @var \DateTimeImmutable|null
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
      * @JMS\SerializedName("datetime_landed")
      */
     public $dateTimeLanded;
     /**
      * @var \DateTimeImmutable|null
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
      * @JMS\SerializedName("first_seen")
      */
     public $firstSeen;
     /**
      * @var \DateTimeImmutable|null
-     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:s'>")
+     * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sZ'>")
      * @JMS\SerializedName("last_seen")
      */
     public $lastSeen;
