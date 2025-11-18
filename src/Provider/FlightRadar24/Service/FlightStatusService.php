@@ -55,6 +55,8 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
 
         $status->departedAt = $myFlight->dateTimeTakeoff;
 
+        $status->status = $myFlight->dateTimeTakeoff ? FlightStatus::STATUS_DEPARTED : FLightStatus::STATUS_SCHEDULED;
+
         if (true === $myFlight->flightEnded) {
             $status->status = FlightStatus::STATUS_LANDED;
             $status->landedAt = $myFlight->dateTimeLanded;
@@ -71,7 +73,6 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
             return $status;
         }
 
-        $status->status = $myFlight->dateTimeTakeoff ? FlightStatus::STATUS_DEPARTED : FLightStatus::STATUS_SCHEDULED;
         $status->eta = $myPosition->eta;
 
         if(!$status->destinationIata){
