@@ -67,6 +67,10 @@ class FlightStatusService implements \Stevro\FlightTracking\Interfaces\FlightSta
         /** @var FlightPosition $myPosition */
         $myPosition = reset($positionData);
 
+        if(!$myPosition){
+            return $status;
+        }
+
         $status->status = $myFlight->dateTimeTakeoff ? FlightStatus::STATUS_DEPARTED : FLightStatus::STATUS_SCHEDULED;
         $status->eta = $myPosition->eta;
 
